@@ -5,8 +5,8 @@ import dht
 from machine import Pin,Timer
 
 # Wi-Fi 設定
-SSID = 'androidALN'
-PASSWORD = '00000000'
+SSID = 'Alan'
+PASSWORD = '54alan520'
 
 # DHT11 感測器設定
 dht_pin = Pin(15)  # 連接到 GPIO 15
@@ -25,12 +25,13 @@ def connect_wifi():
 
 # 呼叫 Web API 範例
 def call_web_api(temp,humi):
-    url = 'http://192.168.40.65:5231/api/Test'  # 替換為你的 Web API URL
+    url = 'http://192.168.1.100:5097/Home/InsertData'  # 替換為你的 Web API URL
     headers = {'Content-Type': 'application/json'}
     data = {'TEMP': temp, 'HUMI': humi}  # 根據需求構造你的請求資料
     
     try:
         # 發送 POST 請求
+        print(data)
         response = urequests.post(url, json=data, headers=headers)
         print('status code:', response.status_code)  # 顯示 HTTP 回應狀態碼
         print('Response Content:', response.text)  # 顯示回應內容
@@ -40,13 +41,12 @@ def call_web_api(temp,humi):
 
 def measureTemp(self):
     try:
-        sensor.measure() # 測量
-        temp = sensor.temperature() # 取得溫度
-        humi = sensor.humidity() # 取得濕度
-        temp_humi = "%2d℃/%2d%%" % (temp, humi) # 格式代文字
-        print(temp_humi)
-        call_web_api(temp,humi)
-        print('123')
+        #sensor.measure() # 測量
+        #temp = sensor.temperature() # 取得溫度
+        #humi = sensor.humidity() # 取得濕度
+        #temp_humi = "%2d℃/%2d%%" % (temp, humi) # 格式代文字
+        #print(temp_humi)
+        call_web_api("26","70.57")
     except Exception as e:
         print('Error',e)
 
@@ -54,7 +54,8 @@ def measureTemp(self):
 def main():
     connect_wifi()  # 先連接 Wi-Fi
     timer1=Timer(1)
-    timer1.init(period=3000, mode=Timer.PERIODIC, callback=measureTemp) # 每隔3秒執行 measureTemp
+    measureTemp()
+    #timer1.init(period=3000, mode=Timer.PERIODIC, callback=measureTemp) # 每隔3秒執行 measureTemp
     #call_web_api()  # 呼叫 Web API
 
 # 執行主程式
